@@ -31,7 +31,6 @@ from typing import (
 
 import psutil
 import shellescape
-import contextlib.nullcontext
 from prov.model import PROV
 from schema_salad.sourceline import SourceLine
 from schema_salad.utils import json_dump, json_dumps
@@ -57,6 +56,17 @@ from .utils import (
     onWindows,
     processes_to_kill,
 )
+
+try:
+    from contextlib import nullcontext
+except ImportError:  # only in python 3.7+
+    class nullcontext:
+        def __init__(self, enter_result=None):
+            self.enter_result = enter_result
+        def __enter__(self):
+            return self.enter_result
+        def __exit__(self, *excinfo):
+            pass
 
 if TYPE_CHECKING:
     from .provenance_profile import ProvenanceProfile  # pylint: disable=unused-import
