@@ -295,8 +295,8 @@ def stage_files(
     secret_store: Optional[SecretStore] = None,
     fix_conflicts: bool = False,
     staging_dir: Optional[str] = None,
-    container_outdirs: Optional[Tuple[Any, str]] = None,
-    entry_types: Tuple[str] = (  # defaults to all of them
+    container_outdirs: Optional[Tuple[str, ...]] = None,
+    entry_types: Tuple[Any] = (  # defaults to all of them
             "File",
             "Directory",
             "WritableFile",
@@ -325,7 +325,7 @@ def stage_files(
                 os.symlink(entry.resolved, destination)
             elif linking == 'hardlink' and entry.type == "File" and not onWindows():
                 os.link(entry.resolved, destination)
-            # TODO: Should the stage_func itself determine if it should run on Windows?
+            # TODO: Shouldn't the stage_func itself determine if it should run on Windows?
             elif stage_func is not None and not onWindows():
                 stage_func(entry.resolved, destination)
             elif entry.type == "File":

@@ -684,7 +684,8 @@ class ContainerCommandLineJob(JobBase, metaclass=ABCMeta):
         """Append volume mappings to the runtime option list."""
 
         stage_files(pathmapper, linking='copy', fix_conflicts=True,
-                    container_outdirs=(self.builder.outdir, self.outdir))
+                    container_outdirs=(self.builder.outdir, self.outdir),
+                    entry_types=("File", "Directory"))
 
         container_outdir = self.builder.outdir
         for key, vol in (itm for itm in pathmapper.items() if itm[1].staged):
