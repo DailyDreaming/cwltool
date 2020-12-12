@@ -729,7 +729,7 @@ class ContainerCommandLineJob(JobBase, metaclass=ABCMeta):
         runtimeContext: RuntimeContext,
         tmpdir_lock: Optional[threading.Lock] = None,
     ) -> None:
-        tmpdir_lock = tmpdir_lock or contextlib.nullcontext()
+        tmpdir_lock = tmpdir_lock or nullcontext()
         with tmpdir_lock:
             if not os.path.exists(self.tmpdir):
                 os.makedirs(self.tmpdir)
