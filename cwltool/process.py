@@ -319,8 +319,8 @@ def stage_files(
                 )
 
         destination = staging_dir if staging_dir else entry.target
-        if not os.path.exists(os.path.dirname(entry.target)):
-            os.makedirs(os.path.dirname(entry.target))
+        if not os.path.exists(os.path.dirname(destination)):
+            os.makedirs(os.path.dirname(destination))
         if entry.type in ("File", "Directory") and os.path.exists(entry.resolved):
             if linking == 'symlink' and not onWindows():
                 os.symlink(entry.resolved, destination)
