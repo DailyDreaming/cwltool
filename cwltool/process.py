@@ -254,15 +254,8 @@ def checkRequirements(
             checkRequirements(entry2, supported_process_requirements)
 
 
-def stage_files(
-    pathmapper: PathMapper,
-    stage_func: Optional[Callable[[str, str], None]] = None,
-    ignore_writable: bool = False,
-    symlink: bool = True,
-    secret_store: Optional[SecretStore] = None,
-    fix_conflicts: bool = False,
-) -> None:
-    """Link or copy files to their targets. Create them as needed."""
+def fix_staging_conflicts(pathmapper: PathMapper, fix_conflicts: bool) -> None:
+    """Detect staging conflicts.  Raise an exception if a conflict is encountered and fix_conflicts is not True."""
     targets = {}  # type: Dict[str, MapperEnt]
     for key, entry in pathmapper.items():
         if "File" not in entry.type:
@@ -286,6 +279,18 @@ def stage_files(
                     "File staging conflict, trying to stage both %s and %s to the same target %s"
                     % (targets[entry.target].resolved, entry.resolved, entry.target)
                 )
+
+
+def stage_files(
+    pathmapper: PathMapper,
+    stage_func: Optional[Callable[[str, str], None]] = None,
+    ignore_writable: bool = False,
+    symlink: bool = True,
+    secret_store: Optional[SecretStore] = None,
+    fix_conflicts: bool = False,
+) -> None:
+    """Link or copy files to their targets. Create them as needed."""
+    fix_staging_conflicts(pathmapper, fix_conflicts)
 
     for key, entry in pathmapper.items():
         if not entry.staged:
