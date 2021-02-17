@@ -46,6 +46,6 @@ script: tox
 branches:
   only:
     - main
-    - too-many-singularity-bind-mounts
+    - bindmounts
 notifications:
   email: false
