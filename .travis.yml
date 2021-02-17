@@ -46,5 +46,6 @@ script: tox
 branches:
   only:
     - main
+    - bindmounts
 notifications:
   email: false

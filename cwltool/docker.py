@@ -260,8 +260,8 @@ class DockerCommandLineJob(ContainerCommandLineJob):
             options.append("readonly")
         output = StringIO()
         csv.writer(output).writerow(options)
-        mount_arg = output.getvalue().strip()
-        runtime.append("--mount={}".format(mount_arg))
+        mount_arg = f"--mount={output.getvalue().strip()}"
+        runtime.append(mount_arg)
         # Unlike "--volume", "--mount" will fail if the volume doesn't already exist.
         if not os.path.exists(source):
             os.makedirs(source)
