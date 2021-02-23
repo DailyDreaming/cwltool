@@ -251,7 +251,7 @@ class DockerCommandLineJob(ContainerCommandLineJob):
         runtime: List[str], source: str, target: str, writable: bool = False
     ) -> None:
         """Add binding arguments to the runtime list."""
-        if os.path.isfile(source) and target.endswith(os.path.basename(source)):
+        if os.path.isfile(source) and target.endswith(os.path.basename(source)) and not writable:
             source = os.path.dirname(source)
             target = os.path.dirname(target)
         options = [
