@@ -441,8 +441,9 @@ class CommandLineTool(Process):
         stagedir: str,
         runtimeContext: RuntimeContext,
         separateDirs: bool,
+        groupDirs: bool = False,
     ) -> PathMapper:
-        return PathMapper(reffiles, runtimeContext.basedir, stagedir, separateDirs)
+        return PathMapper(reffiles, runtimeContext.basedir, stagedir, separateDirs, groupDirs)
 
     def updatePathmap(
         self, outdir: str, pathmap: PathMapper, fn: CWLObjectType
@@ -879,12 +880,8 @@ class CommandLineTool(Process):
 
         dockerReq, _ = self.get_requirement("DockerRequirement")
 
-        separateDirs = True
-        if dockerReq is not None and runtimeContext.use_container:
-            separateDirs = False
-
         builder.pathmapper = self.make_path_mapper(
-            reffiles, builder.stagedir, runtimeContext, separateDirs
+            reffiles, builder.stagedir, runtimeContext, True, True,
         )
         builder.requirements = j.requirements
 

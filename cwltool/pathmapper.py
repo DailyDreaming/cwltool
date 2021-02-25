@@ -62,12 +62,13 @@ class PathMapper(object):
         basedir: str,
         stagedir: str,
         separateDirs: bool = True,
+        groupDirs: bool = False,
     ) -> None:
         """Initialize the PathMapper."""
-        # separateDirs = False
         self._pathmap = {}  # type: Dict[str, MapperEnt]
         self.stagedir = stagedir
         self.separateDirs = separateDirs
+        self.groupDirs = groupDirs
         self.setup(dedup(referenced_files), basedir)
 
     def visitlisting(
@@ -166,13 +167,17 @@ class PathMapper(object):
             )
 
     def setup(self, referenced_files: List[CWLObjectType], basedir: str) -> None:
-
         # Go through each file and set the target to its own directory along
         # with any secondary files.
         stagedir = self.stagedir
         for fob in referenced_files:
             if self.separateDirs:
-                stagedir = os.path.join(self.stagedir, "stg%s" % uuid.uuid4())
+                if self.groupDirs:
+                    stagedir = os.path.join(self.stagedir,
+                                            "s5g%s" % uuid.uuid5(uuid.UUID('6a56ca02-b6f0-4c1a-a4b0-fb0068ce80ad'),
+                                                                 os.path.dirname(fob['location'])))
+                else:
+                    stagedir = os.path.join(self.stagedir, "stg%s" % uuid.uuid4())
             self.visit(
                 fob,
                 stagedir,
