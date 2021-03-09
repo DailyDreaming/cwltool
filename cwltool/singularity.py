@@ -285,9 +285,10 @@ class SingularityCommandLineJob(ContainerCommandLineJob):
         src = docker_windows_path_adjust(source)
         dst = docker_windows_path_adjust(target)
         writable = "rw" if writable else "ro"
-        if os.path.isfile(src) and dst.endswith(os.path.basename(src)) and writable == 'ro':
-            src = os.path.dirname(src)
-            dst = os.path.dirname(dst)
+        # if os.path.isfile(src) and dst.endswith(os.path.basename(src)) and writable == 'ro':
+        #     src = os.path.dirname(src)
+        #     dst = os.path.dirname(dst)
+        #     writable = "rw"  # the directory itself needs to be writable; files inherit previous permissions
         bind_arg = f"--bind={src}:{dst}:{writable}"
         if bind_arg not in runtime:
             runtime.append(bind_arg)
