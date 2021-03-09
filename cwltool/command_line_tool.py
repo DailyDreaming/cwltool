@@ -441,8 +441,9 @@ class CommandLineTool(Process):
         stagedir: str,
         runtimeContext: RuntimeContext,
         separateDirs: bool,
+        groupDirs: bool = False,
     ) -> PathMapper:
-        return PathMapper(reffiles, runtimeContext.basedir, stagedir, separateDirs)
+        return PathMapper(reffiles, runtimeContext.basedir, stagedir, separateDirs, groupDirs)
 
     def updatePathmap(
         self, outdir: str, pathmap: PathMapper, fn: CWLObjectType
@@ -877,8 +878,10 @@ class CommandLineTool(Process):
             )
             _logger.debug("[job %s] %s", j.name, json_dumps(builder.job, indent=4))
 
+        dockerReq, _ = self.get_requirement("DockerRequirement")
+
         builder.pathmapper = self.make_path_mapper(
-            reffiles, builder.stagedir, runtimeContext, True
+            reffiles, builder.stagedir, runtimeContext, True, True,
         )
         builder.requirements = j.requirements
 
@@ -933,7 +936,6 @@ class CommandLineTool(Process):
                 j.name,
                 json_dumps(builder.bindings, indent=4),
             )
-        dockerReq, _ = self.get_requirement("DockerRequirement")
         if dockerReq is not None and runtimeContext.use_container:
             j.outdir = runtimeContext.get_outdir()
             j.tmpdir = runtimeContext.get_tmpdir()
