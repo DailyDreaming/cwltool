@@ -410,9 +410,10 @@ class SingularityCommandLineJob(ContainerCommandLineJob):
                     self.builder.outdir,
                 )
             )
+        tmpdir = "/tmp"  # nosec
         runtime.append("--bind={}:{}:rw".format(
                 docker_windows_path_adjust(os.path.realpath(self.tmpdir)),
-                '/tmp'
+                tmpdir
             )
         )
 
